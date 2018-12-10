@@ -1,0 +1,100 @@
+# module load gcc/6.2.0
+library('methods')
+
+
+#dir.AFRI_Historical <- "/projects/ecogis/SOILWAT2_Projects/AFRI/Historical"
+#dir.AFRI_Historical <- "/scratch/cma393/AFRI/Historical"
+dir.AFRI_Future <- "/scratch/cma393/AFRI/Future"
+dir.jbHOME <- "/home/jbb239"
+
+regions <-  c( "CaliforniaAnnual", "ColdDeserts", "HotDeserts", "NorthernMixedSubset", "SGS") #list.files(dir.AFRI_Historical)
+
+print(regions)
+dir.regions <- file.path(dir.AFRI_Future, regions)
+dir.regions_3Runs <- file.path(dir.AFRI_Future, regions, "3_Runs" )
+dir.regions_1Input <- file.path(dir.AFRI_Future, regions, "1_Input")
+
+print(dir.regions_3Runs)
+print(dir.regions_1Input)
+
+#Function for calculating annual value
+
+    getWatYrTEMP <- function(reg, name){
+      #   sites <- list.files(dir.regions_3Runs[1])
+      #   name=sites[1]
+      #   reg=1
+      
+      f <- list.files(file.path(dir.regions_3Runs[reg], name) )
+      flevs <- substr(f, 11, nchar(f)-6)
+      load(file.path(dir.regions_3Runs[reg], name, f[1]))
+      #dAll1 <- as.data.frame(runDataSC@TEMP@Year)
+      dAll1 <- as.data.frame(runDataSC@TEMP@Month)
+      dAll1$Year[which(dAll1$Month %in% c(10, 11, 12))] <- dAll1$Year[which(dAll1$Month %in% c(10, 11, 12))] + 1
+      dALL2 <-aggregate(dAll1, by=list(dAll1$Year), FUN=mean, na.rm=TRUE)
+      
+      dALL2 <- dALL2[,c("Year", "avg_C")]
+      dALL3 <- as.data.frame(t(dALL2))
+      rownames(dALL3) <- c("year", name )
+      dALL3$scLEV <- flevs[1]
+      dALL3$site <- name
+      
+      dALL3 <- dALL3[2,]
+      
+      for (cf in c(2:45)){
+        load(file.path(dir.regions_3Runs[reg], name, f[cf]))
+        d1 <- as.data.frame(runDataSC@TEMP@Month)
+        d1$Year[which(d1$Month %in% c(10, 11, 12))] <- d1$Year[which(d1$Month %in% c(10, 11, 12))] + 1
+        d2 <-aggregate(d1, by=list(d1$Year), FUN=mean, na.rm=TRUE)
+        
+        d2 <- d2[,c("Year", "avg_C")]
+        d3 <- as.data.frame(t(d2))
+        rownames(d3) <- c("year", name )
+        d3$scLEV <- flevs[cf]
+        d3$site <- name
+        
+        dALL3 <- rbind(dALL3, d3[2,])
+        #print(d3[1, c(1:3)])
+      }
+      return(dALL3) 
+    }
+    
+ 
+
+print("Start Loops")
+print(Sys.time())
+
+#Try in parallel
+    
+    library("parallel")
+    library("foreach")
+    library("doParallel")
+    #detectCores()
+
+ for (r in 1:5){
+  sites <- list.files(dir.regions_3Runs[r])
+  cl<-makeCluster(24)
+  registerDoParallel(cl)
+
+  WatYrtemp = foreach(s = sites, .combine = rbind) %dopar% {
+    f <- list.files(file.path(dir.regions_3Runs[r], s) )
+
+    if(length(f)==45){
+      dsite <- getWatYrTEMP(reg = r, name=s)
+      dsite[c(1:46),]
+    }
+  }
+
+  
+    stopCluster(cl)
+
+  print(paste(regions[r], "Done"))
+  print(Sys.time())
+
+  ifelse (r == 1, WatYrtempFUTURE <- WatYrtemp, WatYrtempFUTURE <- rbind(WatYrtempFUTURE, WatYrtemp))
+}
+
+names(WatYrtempFUTURE)[1:42] <- paste0("yr", c(1:42))
+save(WatYrtempFUTURE, file=file.path(dir.jbHOME, "WatYrtempFUTURE"))
+
+
+
