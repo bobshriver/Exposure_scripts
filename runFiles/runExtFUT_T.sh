@@ -1,4 +1,3 @@
-
 #!/bin/bash
 #SBATCH --job-name=                   # the name of your job
 	# this is the file your output and errors go to
