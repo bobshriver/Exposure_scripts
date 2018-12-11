@@ -4,9 +4,12 @@ library('methods')
 
 #dir.AFRI_Historical <- "/projects/ecogis/SOILWAT2_Projects/AFRI/Historical"
 dir.AFRI_Historical <- "/lustre/projects/ecosystems/sbsc/SOILWAT_Outputs/AFRI/Historical"
+
 dir.jbHOME <- "/cxfs/projects/usgs/ecosystems/sbsc/drylandeco/AFRI/Exposure_Data"
 
-regions <-  c( "CaliforniaAnnual", "ColdDeserts", "HotDeserts", "NorthernMixedSubset", "SGS") #list.files(dir.AFRI_Historical)
+
+
+regions <-  c( "CaliforniaAnnual", "ColdDeserts", "HotDeserts", "NorthernMixedSubset", "SGS", "Western_Gap")  #list.files(dir.AFRI_Historical)
 
 print(regions)
 
@@ -87,7 +90,7 @@ print(Sys.time())
 
 
 
-for (r in 1:5){
+for (r in 1:length(regions)){
   sites <- list.files(dir.regions[r])
   cl<-makeCluster(23)
   registerDoParallel(cl)

@@ -1,10 +1,17 @@
 #!/bin/bash
-#SBATCH --job-name=ExtFUT_WatYr_transp                      # the name of your job
-#SBATCH --output=/home/jbb239/ExtFUT_WatYr_transp.out	# this is the file your output and errors go to
-#SBATCH --time=180:00:00						# 48 hours, this is the MAX time your job will run
-#SBATCH --workdir=/home/jbb239				# your work directory
-#SBATCH --cpus-per-task=24 
-#SBATCH —-mail-type=ALL
+#SBATCH --job-name=                   # the name of your job
+	# this is the file your output and errors go to
+#!/bin/bash
+#SBATCH --job-name=ExtractT  
+#SBATCH --output=/cxfs/projects/usgs/ecosystems/sbsc/drylandeco/AFRI/Exposure_Data/ExtractT.out 
+#SBATCH -n 1
+#SBATCH -c 20
+#SBATCH -p normal
+#SBATCH --account=swbsc
+#SBATCH --time=100:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=rshriver@usgs.gov
+#SBATCH --workdir=/cxfs/projects/usgs/ecosystems/sbsc/drylandeco/AFRI/Exposure_scripts
 
 # load a module, for example
 #module load workshop

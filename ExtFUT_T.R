@@ -4,10 +4,13 @@ library('methods')
 
 #dir.AFRI_Historical <- "/projects/ecogis/SOILWAT2_Projects/AFRI/Historical"
 #dir.AFRI_Historical <- "/scratch/cma393/AFRI/Historical"
-dir.AFRI_Future <- "/scratch/cma393/AFRI/Future"
-dir.jbHOME <- "/home/jbb239"
+dir.AFRI_Historical <- "/lustre/projects/ecosystems/sbsc/SOILWAT_Outputs/AFRI/Future"
 
-regions <-  c( "CaliforniaAnnual", "ColdDeserts", "HotDeserts", "NorthernMixedSubset", "SGS") #list.files(dir.AFRI_Historical)
+dir.jbHOME <- "/cxfs/projects/usgs/ecosystems/sbsc/drylandeco/AFRI/Exposure_Data"
+
+
+
+regions <-  c( "CaliforniaAnnual", "ColdDeserts", "HotDeserts", "NorthernMixedSubset", "SGS", "Western_Gap")  #list.files(dir.AFRI_Historical)
 
 print(regions)
 dir.regions <- file.path(dir.AFRI_Future, regions)
@@ -63,7 +66,7 @@ print(Sys.time())
     library("doParallel")
     #detectCores()
 
- for (r in 1:5){
+ for (r in 1:length(regions)){
   sites <- list.files(dir.regions_3Runs[r])
   cl<-makeCluster(24)
   registerDoParallel(cl)
