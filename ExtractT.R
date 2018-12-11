@@ -92,7 +92,7 @@ print(Sys.time())
 
 for (r in 1:length(regions)){
   sites <- list.files(dir.regions[r])
-  cl<-makeCluster(23)
+  cl<-makeCluster(20)
   registerDoParallel(cl)
 
   anntemp = foreach(s = sites, .combine = rbind) %dopar% {

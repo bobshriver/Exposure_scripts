@@ -61,7 +61,7 @@ print(Sys.time())
         print(dir.regions[r])
         sites <- list.files(dir.regions[r])
         #print(dim(sites))
-        cl<-makeCluster(24)
+        cl<-makeCluster(20)
         registerDoParallel(cl)
 
         annprecip = foreach(s = sites, .combine = rbind) %dopar% {

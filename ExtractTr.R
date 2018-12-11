@@ -60,7 +60,7 @@ print(Sys.time())
 
 for (r in 1:length(regions)){
   sites <- list.files(dir.regions[r])
-  cl<-makeCluster(24)
+  cl<-makeCluster(20)
   registerDoParallel(cl)
 
   anntransp = foreach(s = sites, .combine = rbind) %dopar% {
