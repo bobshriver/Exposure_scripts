@@ -4,7 +4,7 @@ library('methods')
 
 #dir.AFRI_Historical <- "/projects/ecogis/SOILWAT2_Projects/AFRI/Historical"
 #dir.AFRI_Historical <- "/scratch/cma393/AFRI/Historical"
-dir.AFRI_Historical <- "/lustre/projects/ecosystems/sbsc/SOILWAT_Outputs/AFRI/Future"
+dir.AFRI_Future <- "/lustre/projects/ecosystems/sbsc/SOILWAT_Outputs/AFRI/Future"
 
 dir.jbHOME <- "/cxfs/projects/usgs/ecosystems/sbsc/drylandeco/AFRI/Exposure_Data"
 

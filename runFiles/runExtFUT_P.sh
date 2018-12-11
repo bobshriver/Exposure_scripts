@@ -1,8 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=                   # the name of your job
-	# this is the file your output and errors go to
-#!/bin/bash
-#SBATCH --job-name=ExtractT  
+#SBATCH --job-name=ExtFUT_P 
 #SBATCH --output=/cxfs/projects/usgs/ecosystems/sbsc/drylandeco/AFRI/Exposure_Data/ExtractT.out 
 #SBATCH -n 1
 #SBATCH -c 20
