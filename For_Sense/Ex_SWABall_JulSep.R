@@ -10,10 +10,13 @@ library(rSOILWAT2)
 # if (!exists("swpmatric.dy")) swpmatric.dy <- get_SWPmatric_aggL(vwcmatric.dy, texture, sand, clay)
 
 #dir.AFRI_Historical <- "/projects/ecogis/SOILWAT2_Projects/AFRI/Historical"
-dir.AFRI_Historical <- "/scratch/cma393/AFRI/Historical"
-dir.jbHOME <- "/home/jbb239"
+dir.AFRI_Historical <- "/lustre/projects/ecosystems/sbsc/SOILWAT_Outputs/AFRI/Historical"
 
-regions <-  c( "CaliforniaAnnual", "ColdDeserts", "HotDeserts", "NorthernMixedSubset", "SGS") #list.files(dir.AFRI_Historical)
+dir.jbHOME <- "/cxfs/projects/usgs/ecosystems/sbsc/drylandeco/AFRI/Exposure_Data"
+
+
+
+regions <-  c( "CaliforniaAnnual", "ColdDeserts", "HotDeserts", "NorthernMixedSubset", "SGS", "Western_Gap") #list.files(dir.AFRI_Historical)
 
 print(regions)
 dir.regions <- file.path(dir.AFRI_Historical, regions)
@@ -59,13 +62,13 @@ print(Sys.time())
     library("doParallel")
     #detectCores()
 
-    for (r in 1:5){
+    for (r in 1:length(regions)){
       # r=1
  
       sites <- list.files(dir.regions_3Runs[r])
         
         #print(sites[1:10])
-        cl<-makeCluster(24)
+        cl<-makeCluster(20)
         registerDoParallel(cl)
         
         SWA_JulSep = foreach(s = sites, .combine = rbind) %dopar% {

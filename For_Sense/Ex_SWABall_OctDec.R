@@ -10,10 +10,13 @@ library(rSOILWAT2)
 # if (!exists("swpmatric.dy")) swpmatric.dy <- get_SWPmatric_aggL(vwcmatric.dy, texture, sand, clay)
 
 #dir.AFRI_Historical <- "/projects/ecogis/SOILWAT2_Projects/AFRI/Historical"
-dir.AFRI_Historical <- "/scratch/cma393/AFRI/Historical"
-dir.jbHOME <- "/home/jbb239"
+dir.AFRI_Historical <- "/lustre/projects/ecosystems/sbsc/SOILWAT_Outputs/AFRI/Historical"
 
-regions <-  c( "CaliforniaAnnual", "ColdDeserts", "HotDeserts", "NorthernMixedSubset", "SGS") #list.files(dir.AFRI_Historical)
+dir.jbHOME <- "/cxfs/projects/usgs/ecosystems/sbsc/drylandeco/AFRI/Exposure_Data"
+
+
+
+regions <-  c( "CaliforniaAnnual", "ColdDeserts", "HotDeserts", "NorthernMixedSubset", "SGS", "Western_Gap") #list.files(dir.AFRI_Historical)
 
 print(regions)
 dir.regions <- file.path(dir.AFRI_Historical, regions)
@@ -25,7 +28,7 @@ print(dir.regions_1Input)
 
 
 #Function for calculating WDD
-    calcSWA_AprJun <- function(RUN_DATA, name){
+    calcSWA_OctDec <- function(RUN_DATA, name){
       #print("Pre d1")
       #print(Sys.time())
       # s=1
@@ -35,7 +38,7 @@ print(dir.regions_1Input)
       #   name=sites[s]
       
       dSWA <- as.data.frame(RUN_DATA@SWABULK@Month)
-      dSWA_AprJun <- dSWA[which(dSWA$Month %in% c(4:6)),]
+      dSWA_AprJun <- dSWA[which(dSWA$Month %in% c(10:12)),]
       head(dSWA_AprJun)
       numlyrs <- dim(dSWA)[2] - 2
       dSWA_AprJun$Alllyrs <- rowSums(dSWA_AprJun[, c(3:numlyrs+2)])
@@ -59,7 +62,7 @@ print(Sys.time())
     library("doParallel")
     #detectCores()
 
-    for (r in 1:5){
+    for (r in 1:length(regions)){
       # r=1
  
       #print(str(soildata))
@@ -67,14 +70,14 @@ print(Sys.time())
       sites <- list.files(dir.regions_3Runs[r])
         
         #print(sites[1:10])
-        cl<-makeCluster(24)
+        cl<-makeCluster(20)
         registerDoParallel(cl)
         
-        SWA_AprJun = foreach(s = sites, .combine = rbind) %dopar% {
+        SWA_OctDec = foreach(s = sites, .combine = rbind) %dopar% {
           f <- list.files(file.path(dir.regions_3Runs[r], s) )
           if(length(f)==1){
             load(file.path(dir.regions_3Runs[r], s, "sw_output_sc1.RData"))
-            d <- calcSWA_AprJun(RUN_DATA = runDataSC, name=s)
+            d <- calcSWA_OctDec(RUN_DATA = runDataSC, name=s)
             d[2,]
           }
         }
@@ -83,12 +86,12 @@ print(Sys.time())
         print(paste(regions[r], "Done"))
         print(Sys.time())
         
-        ifelse (r == 1, annualSWA_AprJun <- SWA_AprJun, annualSWA_AprJun <- rbind(annualSWA_AprJun, SWA_AprJun))    
+        ifelse (r == 1, annualSWA_OctDec <- SWA_OctDec, annualSWA_OctDec <- rbind(annualSWA_OctDec, SWA_OctDec))    
     }
     
 
-names(annualSWA_AprJun) <- paste(c(1915:2015))
-save(annualSWA_AprJun, file=file.path(dir.jbHOME, "annualSWA_AprJun19152015"))
+names(annualSWA_OctDec) <- paste(c(1915:2015))
+save(annualSWA_OctDec, file=file.path(dir.jbHOME, "annualSWA_OctDec19152015"))
 
 
 
