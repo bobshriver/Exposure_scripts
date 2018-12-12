@@ -8,7 +8,8 @@
 #SBATCH --time=40:00:00
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=rshriver@usgs.gov
-#SBATCH --workdir=/cxfs/projects/usgs/ecosystems/sbsc/drylandeco/AFRI/Exposure_scripts
+#SBATCH --workdir=/cxfs/projects/usgs/ecosystems/sbsc/drylandeco/AFRI/Exposure_scripts/For_Sense
+
 
 # load a module, for example
 #module load workshop
