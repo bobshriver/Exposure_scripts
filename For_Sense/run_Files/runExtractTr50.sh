@@ -15,6 +15,7 @@
 
 # run your application, precede the application command with srun
 # run your application, precede the application command with srun
+module load gcc/7.1.0
 srun date
 srun Rscript ExtractTr50.R
 srun date
