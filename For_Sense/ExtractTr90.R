@@ -105,7 +105,7 @@ for (r in 1:length(regions)){
 
 
 names(annualtransp) <- paste(c(1915:2015))
-save(annualtransp, file=file.path(dir.jbHOME, "annualtransp19152015"))
+save(annualtransp, file=file.path(dir.jbHOME, "annualtransp90_19152015"))
 
 
 # 
