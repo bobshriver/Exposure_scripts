@@ -1,7 +1,7 @@
 library("sp")
 library('methods')
 #library("dplyr")
-library(rSOILWAT2)
+#library(rSOILWAT2)
 
 #These are the functions I need:
 # if (!exists("vwcmatric.dy")) vwcmatric.dy <- get_Response_aggL(swof["sw_vwcmatric"], tscale = "dy", 
