@@ -84,7 +84,7 @@ for (r in 1:length(regions)){
   cl<-makeCluster(20)
   registerDoParallel(cl)
 
-  anntransp = foreach(s = sites, .combine = rbind) %dopar% {
+  anntransp = foreach(s = sites, .combine = rbind,.packages=c('plyr')) %dopar% {
     f <- list.files(file.path(dir.regions[r], s) )
     if(length(f)==1){
       load(file.path(dir.regions[r], s, "sw_output_sc1.RData"))
