@@ -2,7 +2,7 @@
 #SBATCH --job-name=ExSWABall_OctDec
 #SBATCH --output=/cxfs/projects/usgs/ecosystems/sbsc/drylandeco/AFRI/Exposure_Data/SWABall_OctDec.out 
 #SBATCH -n 1
-#SBATCH -c 20
+#SBATCH -c 10
 #SBATCH -p normal
 #SBATCH --account=swbsc
 #SBATCH --time=40:00:00
