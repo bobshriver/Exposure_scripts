@@ -10,7 +10,7 @@ library('methods')
 # if (!exists("swpmatric.dy")) swpmatric.dy <- get_SWPmatric_aggL(vwcmatric.dy, texture, sand, clay)
 
 #dir.AFRI_Historical <- "/projects/ecogis/SOILWAT2_Projects/AFRI/Historical"
-dir.AFRI_Historical <- "/lustre/projects/ecosystems/sbsc/SOILWAT_Outputs/AFRI/Historical"
+dir.AFRI_Historical <- "/cxfs/projects/usgs/ecosystems/sbsc/AFRI/Historical"
 
 dir.jbHOME <- "/cxfs/projects/usgs/ecosystems/sbsc/drylandeco/AFRI/Exposure_Data"
 
@@ -62,7 +62,7 @@ print(Sys.time())
     library("doParallel")
     #detectCores()
 
-    for (r in 6:length(regions)){
+    for (r in 1:length(regions)){
       # r=1
  
       #print(str(soildata))
@@ -70,7 +70,7 @@ print(Sys.time())
       sites <- list.files(dir.regions_3Runs[r])
         
         #print(sites[1:10])
-        cl<-makeCluster(10)
+        cl<-makeCluster(20)
         registerDoParallel(cl)
         
         SWA_OctDec = foreach(s = sites, .combine = rbind) %dopar% {
