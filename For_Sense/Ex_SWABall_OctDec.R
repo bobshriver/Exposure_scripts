@@ -41,7 +41,9 @@ print(dir.regions_1Input)
       dSWA_AprJun <- dSWA[which(dSWA$Month %in% c(10:12)),]
       head(dSWA_AprJun)
       numlyrs <- dim(dSWA)[2] - 2
-      dSWA_AprJun$Alllyrs <- rowSums(dSWA_AprJun[, c(3:numlyrs+2)])
+      
+      if(numlyrs>1){dSWA_AprJun$Alllyrs <- rowSums(dSWA_AprJun[, c(3:numlyrs+2)])} else{
+        dSWA_AprJun$Alllyrs <- dSWA_AprJun[, c(3:numlyrs+2)]}
       
       d <- dSWA_AprJun[, c("Year", "Alllyrs")]
       
@@ -74,7 +76,7 @@ print(Sys.time())
         cl<-makeCluster(20)
         registerDoParallel(cl)
         
-        SWA_OctDec = foreach(s = sites[1:60000], .combine = rbind) %dopar% {
+        SWA_OctDec = foreach(s = sites, .combine = rbind) %dopar% {
           f <- list.files(file.path(dir.regions_3Runs[r], s) )
           if(length(f)==1){
             load(file.path(dir.regions_3Runs[r], s, "sw_output_sc1.RData"))
@@ -84,7 +86,6 @@ print(Sys.time())
     
    }
         }
-	print('111111')
        stopCluster(cl)
     
         print(paste(regions[r], "Done"))
