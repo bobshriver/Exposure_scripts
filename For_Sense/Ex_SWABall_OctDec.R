@@ -62,32 +62,35 @@ print(Sys.time())
     library("doParallel")
     #detectCores()
 
-    for (r in 1:length(regions)){
+    for (r in 6:length(regions)){
       # r=1
  
       #print(str(soildata))
     
       sites <- list.files(dir.regions_3Runs[r])
-        
+       writeLines(c(""), "log.txt")
+ 
         #print(sites[1:10])
         cl<-makeCluster(20)
         registerDoParallel(cl)
         
-        SWA_OctDec = foreach(s = sites, .combine = rbind) %dopar% {
+        SWA_OctDec = foreach(s = sites[1:60000], .combine = rbind) %dopar% {
           f <- list.files(file.path(dir.regions_3Runs[r], s) )
           if(length(f)==1){
             load(file.path(dir.regions_3Runs[r], s, "sw_output_sc1.RData"))
             d <- calcSWA_OctDec(RUN_DATA = runDataSC, name=s)
              print(file.path(dir.regions_3Runs[r], s, "sw_output_sc1.RData"))
             d[2,]
-          }
+    
+   }
         }
-        stopCluster(cl)
+	print('111111')
+       stopCluster(cl)
     
         print(paste(regions[r], "Done"))
         print(Sys.time())
         
-        ifelse (r == 1, annualSWA_OctDec <- SWA_OctDec, annualSWA_OctDec <- rbind(annualSWA_OctDec, SWA_OctDec))    
+       # ifelse (r == 1, annualSWA_OctDec <- SWA_OctDec, annualSWA_OctDec <- rbind(annualSWA_OctDec, SWA_OctDec))    
     }
     
 

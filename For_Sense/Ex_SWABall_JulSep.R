@@ -62,7 +62,7 @@ print(Sys.time())
     library("doParallel")
     #detectCores()
 
-    for (r in 1:length(regions)){
+    for (r in 4:length(regions)){
       # r=1
  
       sites <- list.files(dir.regions_3Runs[r])
