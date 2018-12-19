@@ -21,10 +21,10 @@ regions <-  c( "CaliforniaAnnual", "ColdDeserts", "HotDeserts", "NorthernMixedSu
 print(regions)
 dir.regions <- file.path(dir.AFRI_Historical, regions)
 dir.regions_3Runs <- file.path(dir.AFRI_Historical, regions, "3_Runs" )
-dir.regions_1Input <- file.path(dir.AFRI_Historical, regions, "1_Input")
+#dir.regions_1Input <- file.path(dir.AFRI_Historical, regions, "1_Input")
 
 print(dir.regions_3Runs)
-print(dir.regions_1Input)
+#print(dir.regions_1Input)
 
 
 #Function for calculating WDD
@@ -42,8 +42,8 @@ print(dir.regions_1Input)
       head(dSWA_AprJun)
       numlyrs <- dim(dSWA)[2] - 2
       
-      if(numlyrs>1){dSWA_AprJun$Alllyrs <- rowSums(dSWA_AprJun[, c(3:numlyrs+2)])} else{
-        dSWA_AprJun$Alllyrs <- dSWA_AprJun[, c(3:numlyrs+2)]}
+      if(numlyrs>1){dSWA_AprJun$Alllyrs <- rowSums(as.matrix(dSWA_AprJun[, c(3:numlyrs+2)]))} else{
+        dSWA_AprJun$Alllyrs <- as.matrix(dSWA_AprJun[, c(3:numlyrs+2)])}
       
       d <- dSWA_AprJun[, c("Year", "Alllyrs")]
       
@@ -70,8 +70,7 @@ print(Sys.time())
       #print(str(soildata))
     
       sites <- list.files(dir.regions_3Runs[r])
-       writeLines(c(""), "log.txt")
- 
+
         #print(sites[1:10])
         cl<-makeCluster(20)
         registerDoParallel(cl)
@@ -81,17 +80,16 @@ print(Sys.time())
           if(length(f)==1){
             load(file.path(dir.regions_3Runs[r], s, "sw_output_sc1.RData"))
             d <- calcSWA_OctDec(RUN_DATA = runDataSC, name=s)
-             print(file.path(dir.regions_3Runs[r], s, "sw_output_sc1.RData"))
             d[2,]
     
    }
         }
-       stopCluster(cl)
+       #stopCluster(cl)
     
         print(paste(regions[r], "Done"))
         print(Sys.time())
         
-       # ifelse (r == 1, annualSWA_OctDec <- SWA_OctDec, annualSWA_OctDec <- rbind(annualSWA_OctDec, SWA_OctDec))    
+       ifelse (r == 1, annualSWA_OctDec <- SWA_OctDec, annualSWA_OctDec <- rbind(annualSWA_OctDec, SWA_OctDec))    
     }
     
 
