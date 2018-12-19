@@ -64,7 +64,7 @@ print(Sys.time())
     library("doParallel")
     #detectCores()
 
-    for (r in 6:length(regions)){
+    for (r in 1:length(regions)){
       # r=1
  
       #print(str(soildata))
@@ -75,7 +75,7 @@ print(Sys.time())
         cl<-makeCluster(20)
         registerDoParallel(cl)
         
-        SWA_OctDec = foreach(s = sites, .combine = rbind) %dopar% {
+        SWA_OctDec = foreach(s = sites[1:20], .combine = rbind) %dopar% {
           f <- list.files(file.path(dir.regions_3Runs[r], s) )
           if(length(f)==1){
             load(file.path(dir.regions_3Runs[r], s, "sw_output_sc1.RData"))
