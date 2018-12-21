@@ -21,14 +21,14 @@ regions <-  c( "CaliforniaAnnual", "ColdDeserts", "HotDeserts", "NorthernMixedSu
 print(regions)
 dir.regions <- file.path(dir.AFRI_Historical, regions)
 dir.regions_3Runs <- file.path(dir.AFRI_Historical, regions, "3_Runs" )
-dir.regions_1Input <- file.path(dir.AFRI_Historical, regions, "1_Input")
+#dir.regions_1Input <- file.path(dir.AFRI_Historical, regions, "1_Input")
 
 print(dir.regions_3Runs)
-print(dir.regions_1Input)
+#print(dir.regions_1Input)
 
 
 #Function for calculating WDD
-    calcSWA_JanMar <- function(RUN_DATA, name){
+    calcSWA_OctDec <- function(RUN_DATA, name){
       #print("Pre d1")
       #print(Sys.time())
       # s=1
@@ -38,11 +38,12 @@ print(dir.regions_1Input)
       #   name=sites[s]
       
       dSWA <- as.data.frame(RUN_DATA@SWABULK@Month)
-      dSWA_AprJun <- dSWA[which(dSWA$Month %in% c(1:3)),]
+      dSWA_AprJun <- dSWA[which(dSWA$Month %in% c(10:12)),]
       head(dSWA_AprJun)
       numlyrs <- dim(dSWA)[2] - 2
+      
       if(numlyrs>1){dSWA_AprJun$Alllyrs <- rowSums(as.matrix(dSWA_AprJun[, c(3:(numlyrs+2))]))} else{
-        dSWA_AprJun$Alllyrs <- as.matrix(dSWA_AprJun[, c(3:(numlyrs+2))])}
+        dSWA_AprJun$Alllyrs <- as.matrix(dSWA_AprJun[, c(3:numlyrs+2)])}
       
       d <- dSWA_AprJun[, c("Year", "Alllyrs")]
       
@@ -63,36 +64,37 @@ print(Sys.time())
     library("doParallel")
     #detectCores()
 
-    for (r in 1:length(regions)){
+    for (r in 6:length(regions)){
       # r=1
  
       #print(str(soildata))
     
       sites <- list.files(dir.regions_3Runs[r])
-        
+
         #print(sites[1:10])
         cl<-makeCluster(20)
         registerDoParallel(cl)
         
-        SWA_JanMar = foreach(s = sites, .combine = rbind) %dopar% {
+        SWA_OctDec = foreach(s = sites[12000:13000], .combine = rbind) %do% {
           f <- list.files(file.path(dir.regions_3Runs[r], s) )
           if(length(f)==1){
             load(file.path(dir.regions_3Runs[r], s, "sw_output_sc1.RData"))
-            d <- calcSWA_JanMar(RUN_DATA = runDataSC, name=s)
+            d <- calcSWA_OctDec(RUN_DATA = runDataSC, name=s)
             d[2,]
-          }
+    print(s)
+   }
         }
-        stopCluster(cl)
-        
+       #stopCluster(cl)
+    
         print(paste(regions[r], "Done"))
         print(Sys.time())
         
-        ifelse (r == 1, annualSWA_JanMar <- SWA_JanMar, annualSWA_JanMar <- rbind(annualSWA_JanMar, SWA_JanMar))    
+       ifelse (r == 1, annualSWA_OctDec <- SWA_OctDec, annualSWA_OctDec <- rbind(annualSWA_OctDec, SWA_OctDec))    
     }
     
 
-names(annualSWA_JanMar) <- paste(c(1915:2015))
-save(annualSWA_JanMar, file=file.path(dir.jbHOME, "annualSWA_JanMar19152015"))
+names(annualSWA_OctDec) <- paste(c(1915:2015))
+save(annualSWA_OctDec, file=file.path(dir.jbHOME, "annualSWA_OctDec19152015"))
 
 
 

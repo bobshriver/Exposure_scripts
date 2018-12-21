@@ -41,7 +41,9 @@ print(dir.regions_1Input)
       dSWA_AprJun <- dSWA[which(dSWA$Month %in% c(7:9)),]
       head(dSWA_AprJun)
       numlyrs <- dim(dSWA)[2] - 2
-      dSWA_AprJun$Alllyrs <- rowSums(dSWA_AprJun[, c(3:numlyrs+2)])
+      
+      if(numlyrs>1){dSWA_AprJun$Alllyrs <- rowSums(as.matrix(dSWA_AprJun[, c(3:(numlyrs+2))]))} else{
+        dSWA_AprJun$Alllyrs <- as.matrix(dSWA_AprJun[, c(3:(numlyrs+2))])}
       
       d <- dSWA_AprJun[, c("Year", "Alllyrs")]
       

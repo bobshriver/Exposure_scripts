@@ -75,7 +75,7 @@ print(Sys.time())
         cl<-makeCluster(20)
         registerDoParallel(cl)
         
-        SWA_OctDec = foreach(s = sites, .combine = rbind,.errorhandling='remove') %dopar% {
+        SWA_OctDec = foreach(s = sites, .combine = rbind) %dopar% {
           f <- list.files(file.path(dir.regions_3Runs[r], s) )
           if(length(f)==1){
             load(file.path(dir.regions_3Runs[r], s, "sw_output_sc1.RData"))
