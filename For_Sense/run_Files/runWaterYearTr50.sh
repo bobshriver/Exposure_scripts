@@ -1,6 +1,6 @@
 #!/bin/bash
-#SBATCH --job-name=ExtractTr10  
-#SBATCH --output=/cxfs/projects/usgs/ecosystems/sbsc/drylandeco/AFRI/Exposure_Data/ExtractTr10.out 
+#SBATCH --job-name=WaterYearTr50 
+#SBATCH --output=/cxfs/projects/usgs/ecosystems/sbsc/drylandeco/AFRI/Exposure_Data/WaterYearTr50.out 
 #SBATCH -n 1
 #SBATCH -c 20
 #SBATCH -p normal
@@ -17,6 +17,6 @@
 # run your application, precede the application command with srun
 module load gcc/7.1.0
 srun date
-srun Rscript ExtractTr10.R
+srun Rscript WaterYearTr50.R
 srun date
  
