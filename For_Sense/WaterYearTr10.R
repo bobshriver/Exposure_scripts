@@ -103,12 +103,12 @@ for (r in 1:length(regions)){
   print(Sys.time())
 
   ifelse (r == 1, annualtransp <- anntransp, annualtransp <- rbind(annualtransp, anntransp))
-  names(anntransp) <- paste(c(1915:2016))
+  names(anntransp) <- paste(c(1915:2015))
 
 }
 
 
-names(annualtransp) <- paste(c(1915:2016))
+names(annualtransp) <- paste(c(1915:2015))
 save(annualtransp, file=file.path(dir.jbHOME, "WatYrtransp10_19152015"))
 
 
