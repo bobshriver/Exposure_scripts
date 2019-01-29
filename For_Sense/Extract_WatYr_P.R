@@ -3,13 +3,13 @@ library('methods')
 
 
 #dir.AFRI_Historical <- "/projects/ecogis/SOILWAT2_Projects/AFRI/Historical"
-dir.AFRI_Historical <-"/lustre/projects/ecosystems/sbsc/SOILWAT_Outputs/AFRI/Historical"
+dir.AFRI_Historical <- "/lustre/projects/ecosystems/sbsc/SOILWAT_Outputs/AFRI/Historical"
 
 dir.jbHOME <- "/cxfs/projects/usgs/ecosystems/sbsc/drylandeco/AFRI/Exposure_Data"
 
 
 
-regions <-  c( "CaliforniaAnnual", "ColdDeserts", "HotDeserts", "NorthernMixedSubset", "SGS", "Western_Gap", "Western_Gap")  #list.files(dir.AFRI_Historical)
+regions <-  c( "CaliforniaAnnual", "ColdDeserts", "HotDeserts", "NorthernMixedSubset", "SGS", "Western_Gap") #list.files(dir.AFRI_Historical)
 
 print(regions)
 
@@ -30,21 +30,19 @@ print(dir.regions)
 #load(file.path(dir.regions[5], sitesSGS[1], "sw_output_sc1.RData"))
 #print(str(runDataSC))
 
-#Function for calculating annual value
-    getyearlyPRECIP <- function(RUN_DATA, name){
 
-      d1 <- as.data.frame(RUN_DATA@PRECIP@Year)
-      #print(str(d1))
-      d2 <- d1[,c(1, 2)]
-      #print(str(d2))
-      names(d2)[2] <- c(name)
-      #print(str(d2))
-      d3 <- as.data.frame(t(d2))
-      #print(str(d3))
-      rownames(d3) <- c("year", name)
-      #print(str(d3))
-      return(d3) 
-    }
+getWatYrPRECIP <- function(RUN_DATA, name){
+  #RUN_DATA =runDataSC
+  d1 <- as.data.frame(RUN_DATA@PRECIP@Month)
+  d1$Year[which(d1$Month %in% c(10, 11, 12))] <- d1$Year[which(d1$Month %in% c(10, 11, 12))] + 1
+  d2 <-aggregate(d1, by=list(d1$Year), FUN=sum, na.rm=TRUE)
+  
+  d2 <- d2[,c("Year", "ppt")]
+  names(d2)[2] <- c(name)
+  d3 <- as.data.frame(t(d2))
+  rownames(d3) <- c("year", name)
+  return(d3) 
+}
     
 print("Start Loops")
 print(Sys.time())
@@ -64,11 +62,11 @@ print(Sys.time())
         cl<-makeCluster(20)
         registerDoParallel(cl)
 
-        annprecip = foreach(s = sites, .combine = rbind) %dopar% {
+        WYprecip = foreach(s = sites, .combine = rbind) %dopar% {
           f <- list.files(file.path(dir.regions[r], s) )
           if(length(f)==1){
             load(file.path(dir.regions[r], s, "sw_output_sc1.RData"))
-            d <- getyearlyPRECIP(RUN_DATA = runDataSC, name=s)
+            d <- getWatYrPRECIP(RUN_DATA = runDataSC, name=s)
             d[2,]
           }
         }
@@ -77,12 +75,12 @@ print(Sys.time())
         print(paste(regions[r], "Done"))
         print(Sys.time())
         
-        ifelse (r == 1, annualprecip <- annprecip, annualprecip <- rbind(annualprecip, annprecip))    
-        names(annprecip) <- paste(c(1915:2015))
+        ifelse (r == 1, WatYrprecip <- WYprecip, WatYrprecip <- rbind(WatYrprecip, WYprecip))    
+        #names(WYprecip) <- paste(c(1915:2015))
     }
 
-names(annualprecip) <- paste(c(1915:2015))
-save(annualprecip, file=file.path(dir.jbHOME, "annualprecip19152015"))
+names(WatYrprecip) <- paste(c(1915:2015))
+save(WatYrprecip, file=file.path(dir.jbHOME, "WatYrprecip19152015"))
 
 
 

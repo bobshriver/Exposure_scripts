@@ -3,7 +3,7 @@
 	# this is the file your output and errors go to
 #!/bin/bash
 #SBATCH --job-name=ExtractT  
-#SBATCH --output=/cxfs/projects/usgs/ecosystems/sbsc/drylandeco/AFRI/Exposure_Data/ExtractT.out 
+#SBATCH --output=/cxfs/projects/usgs/ecosystems/sbsc/drylandeco/AFRI/Exposure_Data/Extract_WatYr_P.out 
 #SBATCH -n 1
 #SBATCH -c 20
 #SBATCH -p normal
