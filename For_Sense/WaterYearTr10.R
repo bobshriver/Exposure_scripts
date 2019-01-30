@@ -46,6 +46,7 @@ print(dir.regions)
      
      ####For Days 
      d_allD <- as.data.frame(runDataSC@TRANSP@Day)
+     d_allD$Year[which(d_allD$Day > 273)] <- d_allD$Year[which(d_allD$Day > 273)] + 1
       allTcolsD <- grep("total", names(d_allD), value=TRUE)
       d_allD$TotalLyrSum <- rowSums(d_allD[, c(allTcolsD)])
       d_all_list<-split(d_allD,d_allD$Year)

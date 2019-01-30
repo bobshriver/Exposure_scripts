@@ -46,6 +46,7 @@ print(dir.regions)
      
      ####For Days 
      d_allD <- as.data.frame(runDataSC@TRANSP@Day)
+     d_allD$Year[which(d_allD$Day > 273)] <- d_allD$Year[which(d_allD$Day > 273)] + 1
       allTcolsD <- grep("total", names(d_allD), value=TRUE)
       d_allD$TotalLyrSum <- rowSums(d_allD[, c(allTcolsD)])
       d_all_list<-split(d_allD,d_allD$Year)
@@ -55,6 +56,7 @@ print(dir.regions)
      d_allD$TotalLyrSum<-d_all_df$TotalLyrSum
      YearbyDay<-merge(d_all[,c("Year","TotalLyrSum")],d_allD[,c("Year","Day","TotalLyrSum")], by="Year", all.y=T)
      YearbyDay$Q<-YearbyDay$TotalLyrSum.y/YearbyDay$TotalLyrSum.x
+
      
       YearbyDay<-split(YearbyDay,YearbyDay$Year)
 	YearbyDayQ<- ldply(lapply(YearbyDay,  FUN=function(x){min(which(x$Q>.9))}),data.frame)		
