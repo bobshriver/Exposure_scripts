@@ -83,7 +83,8 @@ print(numlyrs)
       sandMEANtop <- weighted.mean(sSAND[1:nlyrs], slyrwidths[1:nlyrs])
       clayMEANtop <- weighted.mean(sCLAY[1:nlyrs], slyrwidths[1:nlyrs])
       #dVWC_AprJun$count<-1:length(dVWC_AprJun$Year)
-       dVWC$SWP <- VWCtoSWP_simple(vwc=dVWC$Alllyrs, sand=sandMEANtop, clay=clayMEANtop)
+       dVWC_AprJun$SWP <- VWCtoSWP_simple(vwc=dVWC_AprJun$Alllyrs, sand=sandMEANtop, clay=clayMEANtop)
+      print(dVWC$SWP[1:5])
 
       d <- dVWC_AprJun[, c("Year", "Alllyrs",'count', "Temp", "SWP")]
       d_all_list<-split(d,d$Year)
@@ -99,13 +100,13 @@ print(numlyrs)
       		d1 <- as.data.frame(t(d1))[2,]
       		d2 <- as.data.frame(t(d2))[2,]
       		
+      print(d1[1:5])
 
       rownames(d1) <- c( name)
    
       rownames(d2) <- c( name)
       out<-list(DriestDays=d1, HottestDays=d2)
       return(out)
-      print(d1[1:5])
     }
 
 print("Start Loop")
