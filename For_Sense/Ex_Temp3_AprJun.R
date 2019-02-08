@@ -138,7 +138,7 @@ print(Sys.time())
       sites <- list.files(dir.regions_3Runs[r])
         
         #print(sites[1:10])
-        cl<-makeCluster(20)
+        cl<-makeCluster(3)
         registerDoParallel(cl)
         
         HotDry_AprJun = foreach(s = sites, .combine = rbind) %dopar% {
