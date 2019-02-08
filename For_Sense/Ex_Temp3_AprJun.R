@@ -68,10 +68,10 @@ print(dir.regions_1Input)
       sdepths[sdepths > maxdepth ] <- NA
       sdepth <- sdepths[-1]
       slyrwidths <- diff(c(0, na.omit(t(sdepth)) ) )
-      
+      numlyrs <- dim(dVWC)[2] - 2
+
       nlyrs<-if(numlyrs<7){numlyrs} else {6}
       
-       numlyrs <- dim(dVWC)[2] - 2
       if(numlyrs>1 & numlyrs<7 ){dVWC_AprJun$Alllyrs <- apply(as.matrix(dVWC_AprJun[, c(3:(numlyrs+2))]), 1, FUN=function(x) weighted.mean(x, slyrwidths[1:nlyrs]))} 
       if(numlyrs>1 & numlyrs>6 ){dVWC_AprJun$Alllyrs <- apply(as.matrix(dVWC_AprJun[, c(3:(6+2))]), 1, FUN=function(x) weighted.mean(x, slyrwidths[1:nlyrs]))}
       if(numlyrs==1){dVWC_AprJun$Alllyrs <- as.matrix(dVWC_AprJun[, c(3:(numlyrs+2))])}
