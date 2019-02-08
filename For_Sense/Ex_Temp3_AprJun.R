@@ -69,10 +69,10 @@ print(dir.regions_1Input)
       sdepth <- sdepths[-1]
       slyrwidths <- diff(c(0, na.omit(t(sdepth)) ) )
       numlyrs <- dim(dVWC)[2] - 2
-print(numlyrs)
+#print(numlyrs)
       
       nlyrs<-if(numlyrs<7){numlyrs} else {6}
-      print(nlyrs)
+      #print(nlyrs)
       if(numlyrs>1 & numlyrs<7 ){dVWC_AprJun$Alllyrs <- apply(as.matrix(dVWC_AprJun[, c(3:(numlyrs+2))]), 1, FUN=function(x) weighted.mean(x, slyrwidths[1:nlyrs]))} 
       if(numlyrs>1 & numlyrs>6 ){dVWC_AprJun$Alllyrs <- apply(as.matrix(dVWC_AprJun[, c(3:(6+2))]), 1, FUN=function(x) weighted.mean(x, slyrwidths[1:nlyrs]))}
       if(numlyrs==1){dVWC_AprJun$Alllyrs <- as.matrix(dVWC_AprJun[, c(3:(numlyrs+2))])}
@@ -84,10 +84,10 @@ print(numlyrs)
       clayMEANtop <- weighted.mean(sCLAY[1:nlyrs], slyrwidths[1:nlyrs])
       #dVWC_AprJun$count<-1:length(dVWC_AprJun$Year)
        dVWC_AprJun$SWP <- VWCtoSWP_simple(vwc=dVWC_AprJun$Alllyrs, sand=sandMEANtop, clay=clayMEANtop)
-      print(dVWC_AprJun$SWP[1:5])
-	print(head(dVWC_AprJun))
+      #print(dVWC_AprJun$SWP[1:5])
+	#print(head(dVWC_AprJun))
       d <- dVWC_AprJun[, c("Year", "Alllyrs", "Temp", "SWP")]
-      print(head(d))
+      #print(head(d))
       d_all_list<-split(d,d$Year)
       
       
@@ -141,16 +141,15 @@ print(Sys.time())
       sites <- list.files(dir.regions_3Runs[r])
         
         #print(sites[1:10])
-        #cl<-makeCluster(3)
-       #registerDoParallel(cl)
+        cl<-makeCluster(20)
+       registerDoParallel(cl)
         
-        HotDry_AprJun = foreach(s = sites, .combine = rbind) %do% {
+        HotDry_AprJun = foreach(s = sites, .combine = rbind) %dopar% {
           f <- list.files(file.path(dir.regions_3Runs[r], s) )
           if(length(f)==1){
             load(file.path(dir.regions_3Runs[r], s, "sw_output_sc1.RData"))
             print(s)
             d <- calcHotDry_AprJun(RUN_DATA = runDataSC, name=s)$DriestDays
-            print(d)
             d
             
           }
