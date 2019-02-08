@@ -76,10 +76,9 @@ print(numlyrs)
       if(numlyrs>1 & numlyrs<7 ){dVWC_AprJun$Alllyrs <- apply(as.matrix(dVWC_AprJun[, c(3:(numlyrs+2))]), 1, FUN=function(x) weighted.mean(x, slyrwidths[1:nlyrs]))} 
       if(numlyrs>1 & numlyrs>6 ){dVWC_AprJun$Alllyrs <- apply(as.matrix(dVWC_AprJun[, c(3:(6+2))]), 1, FUN=function(x) weighted.mean(x, slyrwidths[1:nlyrs]))}
       if(numlyrs==1){dVWC_AprJun$Alllyrs <- as.matrix(dVWC_AprJun[, c(3:(numlyrs+2))])}
-		print(dVWC_AprJun$Alllyrs)
       
       sSAND <- soilSAND[which(soilSAND$Label==s_name), c(2:(1+length(slyrwidths)))]
-      print(sSAND)
+      
       sCLAY <- soilCLAY[which(soilCLAY$Label==s_name), c(2:(1+length(slyrwidths)))]
       sandMEANtop <- weighted.mean(sSAND[1:nlyrs], slyrwidths[1:nlyrs])
       clayMEANtop <- weighted.mean(sCLAY[1:nlyrs], slyrwidths[1:nlyrs])
@@ -106,7 +105,7 @@ print(numlyrs)
       rownames(d2) <- c( name)
       out<-list(DriestDays=d1, HottestDays=d2)
       return(out)
-      print('5')
+      print(d1[1:5])
     }
 
 print("Start Loop")
