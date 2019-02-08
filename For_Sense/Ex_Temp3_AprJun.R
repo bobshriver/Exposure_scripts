@@ -84,9 +84,10 @@ print(numlyrs)
       clayMEANtop <- weighted.mean(sCLAY[1:nlyrs], slyrwidths[1:nlyrs])
       #dVWC_AprJun$count<-1:length(dVWC_AprJun$Year)
        dVWC_AprJun$SWP <- VWCtoSWP_simple(vwc=dVWC_AprJun$Alllyrs, sand=sandMEANtop, clay=clayMEANtop)
-      print(dVWC$SWP[1:5])
+      print(dVWC_AprJun$SWP[1:5])
 
       d <- dVWC_AprJun[, c("Year", "Alllyrs",'count', "Temp", "SWP")]
+      print(head(d))
       d_all_list<-split(d,d$Year)
       
       
@@ -94,13 +95,14 @@ print(numlyrs)
       d_all_list2<- lapply(d_all_list,  FUN=function(x) { if (length(which(x$SWP< -3))>9){mean(x$Temp[order(x$Temp[which(x$SWP< -3)])[1:10]])}else{NA}})
 
     		d1 <- ldply(d_all_list1, data.frame)
+    	print(d1)
       		d2 <- ldply(d_all_list2, data.frame)
       		 names(d1)[2] <- c(name)
       		 names(d2)[2] <- c(name)
       		d1 <- as.data.frame(t(d1))[2,]
       		d2 <- as.data.frame(t(d2))[2,]
       		
-      print(d1[1:5])
+      
 
       rownames(d1) <- c( name)
    
