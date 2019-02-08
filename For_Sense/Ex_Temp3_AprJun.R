@@ -138,13 +138,14 @@ print(Sys.time())
       sites <- list.files(dir.regions_3Runs[r])
         
         #print(sites[1:10])
-        cl<-makeCluster(3)
-        registerDoParallel(cl)
+        #cl<-makeCluster(3)
+       #registerDoParallel(cl)
         
-        HotDry_AprJun = foreach(s = sites, .combine = rbind) %dopar% {
+        HotDry_AprJun = foreach(s = sites, .combine = rbind) %do% {
           f <- list.files(file.path(dir.regions_3Runs[r], s) )
           if(length(f)==1){
             load(file.path(dir.regions_3Runs[r], s, "sw_output_sc1.RData"))
+            print(s)
             d <- calcHotDry_AprJun(RUN_DATA = runDataSC, name=s)$DriestDays
             d
             
