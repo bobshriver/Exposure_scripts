@@ -75,7 +75,7 @@ print(dir.regions_1Input)
       if(numlyrs>1 & numlyrs<7 ){dVWC_AprJun$Alllyrs <- apply(as.matrix(dVWC_AprJun[, c(3:(numlyrs+2))]), 1, FUN=function(x) weighted.mean(x, slyrwidths[1:nlyrs]))} 
       if(numlyrs>1 & numlyrs>6 ){dVWC_AprJun$Alllyrs <- apply(as.matrix(dVWC_AprJun[, c(3:(6+2))]), 1, FUN=function(x) weighted.mean(x, slyrwidths[1:nlyrs]))}
       if(numlyrs==1){dVWC_AprJun$Alllyrs <- as.matrix(dVWC_AprJun[, c(3:(numlyrs+2))])}
-	print('1')
+
       
       sSAND <- soilSAND[which(soilSAND$Label==s_name), c(2:(1+length(slyrwidths)))]
       sCLAY <- soilCLAY[which(soilCLAY$Label==s_name), c(2:(1+length(slyrwidths)))]
@@ -83,21 +83,21 @@ print(dir.regions_1Input)
       clayMEANtop <- weighted.mean(sCLAY[1:nlyrs], slyrwidths[1:nlyrs])
       #dVWC_AprJun$count<-1:length(dVWC_AprJun$Year)
        dVWC$SWP <- VWCtoSWP_simple(vwc=dVWC$Alllyrs, sand=sandMEANtop, clay=clayMEANtop)
-	print('2')
+
       d <- dVWC_AprJun[, c("Year", "Alllyrs",'count', "Temp", "SWP")]
       d_all_list<-split(d,d$Year)
       
       
       d_all_list1<- lapply(d_all_list,  FUN=function(x) {mean(x$Temp[order(x$Alllyrs)[1:10]])})
       d_all_list2<- lapply(d_all_list,  FUN=function(x) { if (length(which(x$SWP< -3))>9){mean(x$Temp[order(x$Temp[which(x$SWP< -3)])[1:10]])}else{NA}})
-	print('3')
+
     		d1 <- ldply(d_all_list1, data.frame)
       		d2 <- ldply(d_all_list2, data.frame)
       		 names(d1)[2] <- c(name)
       		 names(d2)[2] <- c(name)
       		d1 <- as.data.frame(t(d1))[2,]
       		d2 <- as.data.frame(t(d2))[2,]
-      		print('4')
+      		
 
       rownames(d1) <- c( name)
    
@@ -147,6 +147,7 @@ print(Sys.time())
             load(file.path(dir.regions_3Runs[r], s, "sw_output_sc1.RData"))
             print(s)
             d <- calcHotDry_AprJun(RUN_DATA = runDataSC, name=s)$DriestDays
+            print(d)
             d
             
           }
