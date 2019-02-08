@@ -86,7 +86,7 @@ print(numlyrs)
        dVWC_AprJun$SWP <- VWCtoSWP_simple(vwc=dVWC_AprJun$Alllyrs, sand=sandMEANtop, clay=clayMEANtop)
       print(dVWC_AprJun$SWP[1:5])
 	print(head(dVWC_AprJun))
-      d <- dVWC_AprJun[, c("Year", "Alllyrs",'count', "Temp", "SWP")]
+      d <- dVWC_AprJun[, c("Year", "Alllyrs", "Temp", "SWP")]
       print(head(d))
       d_all_list<-split(d,d$Year)
       
