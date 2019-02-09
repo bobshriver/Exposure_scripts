@@ -43,7 +43,7 @@ print(dir.regions_1Input)
     
     #Function for calculating average temp on dry days. 
 
-    calcHotDry_AprJun <- function(RUN_DATA, name){
+    calcHotDry_OctDec <- function(RUN_DATA, name){
       #print("Pre d1")
       #print(Sys.time())
       # s=1
@@ -55,9 +55,9 @@ print(dir.regions_1Input)
       dVWC <- as.data.frame(RUN_DATA@VWCMATRIC@Day)
       dTemps <- as.data.frame(RUN_DATA@TEMP@Day) 
 
-      dVWC_AprJun <- dVWC[which(dVWC$Day %in% c(91:181)),]
+      dVWC_OctDec <- dVWC[which(dVWC$Day %in% c(274:365)),]
       
-      dVWC_AprJun$Temp <- dTemps[which(dTemps$Day %in% c(91:181)),5]
+      dVWC_OctDec$Temp <- dTemps[which(dTemps$Day %in% c(274:365)),5]
 
       
       s_name <- paste0("Site_", as.integer(substr(name, 1, regexpr('_', name)-1)) )
@@ -73,20 +73,20 @@ print(dir.regions_1Input)
       
       nlyrs<-if(numlyrs<7){numlyrs} else {6}
       #print(nlyrs)
-      if(numlyrs>1 & numlyrs<7 ){dVWC_AprJun$Alllyrs <- apply(as.matrix(dVWC_AprJun[, c(3:(numlyrs+2))]), 1, FUN=function(x) weighted.mean(x, slyrwidths[1:nlyrs]))} 
-      if(numlyrs>1 & numlyrs>6 ){dVWC_AprJun$Alllyrs <- apply(as.matrix(dVWC_AprJun[, c(3:(6+2))]), 1, FUN=function(x) weighted.mean(x, slyrwidths[1:nlyrs]))}
-      if(numlyrs==1){dVWC_AprJun$Alllyrs <- as.matrix(dVWC_AprJun[, c(3:(numlyrs+2))])}
+      if(numlyrs>1 & numlyrs<7 ){dVWC_OctDec$Alllyrs <- apply(as.matrix(dVWC_OctDec[, c(3:(numlyrs+2))]), 1, FUN=function(x) weighted.mean(x, slyrwidths[1:nlyrs]))} 
+      if(numlyrs>1 & numlyrs>6 ){dVWC_OctDec$Alllyrs <- apply(as.matrix(dVWC_OctDec[, c(3:(6+2))]), 1, FUN=function(x) weighted.mean(x, slyrwidths[1:nlyrs]))}
+      if(numlyrs==1){dVWC_OctDec$Alllyrs <- as.matrix(dVWC_OctDec[, c(3:(numlyrs+2))])}
       
       sSAND <- soilSAND[which(soilSAND$Label==s_name), c(2:(1+length(slyrwidths)))]
       
       sCLAY <- soilCLAY[which(soilCLAY$Label==s_name), c(2:(1+length(slyrwidths)))]
       sandMEANtop <- weighted.mean(sSAND[1:nlyrs], slyrwidths[1:nlyrs])
       clayMEANtop <- weighted.mean(sCLAY[1:nlyrs], slyrwidths[1:nlyrs])
-      #dVWC_AprJun$count<-1:length(dVWC_AprJun$Year)
-       dVWC_AprJun$SWP <- VWCtoSWP_simple(vwc=dVWC_AprJun$Alllyrs, sand=sandMEANtop, clay=clayMEANtop)
-      #print(dVWC_AprJun$SWP[1:5])
-	#print(head(dVWC_AprJun))
-      d <- dVWC_AprJun[, c("Year", "Alllyrs", "Temp", "SWP")]
+      #dVWC_OctDec$count<-1:length(dVWC_OctDec$Year)
+       dVWC_OctDec$SWP <- VWCtoSWP_simple(vwc=dVWC_OctDec$Alllyrs, sand=sandMEANtop, clay=clayMEANtop)
+      #print(dVWC_OctDec$SWP[1:5])
+	#print(head(dVWC_OctDec))
+      d <- dVWC_OctDec[, c("Year", "Alllyrs", "Temp", "SWP")]
       #print(head(d))
       d_all_list<-split(d,d$Year)
       
@@ -144,12 +144,12 @@ print(Sys.time())
         cl<-makeCluster(20)
        registerDoParallel(cl)
         
-        DriestDayTemp_AprJun = foreach(s = sites, .combine = rbind,.packages=c('plyr','dplyr')) %dopar% {
+        DriestDayTemp_OctDec = foreach(s = sites, .combine = rbind,.packages=c('plyr','dplyr')) %dopar% {
           f <- list.files(file.path(dir.regions_3Runs[r], s) )
           if(length(f)==1){
             load(file.path(dir.regions_3Runs[r], s, "sw_output_sc1.RData"))
             print(s)
-            d <- calcHotDry_AprJun(RUN_DATA = runDataSC, name=s)$DriestDays
+            d <- calcHotDry_OctDec(RUN_DATA = runDataSC, name=s)$DriestDays
             d
             
           }
@@ -159,12 +159,12 @@ print(Sys.time())
         print(paste(regions[r], "Done"))
         print(Sys.time())
         
-        ifelse (r == 1, annualDriestDayTemp_AprJun <- DriestDayTemp_AprJun, annualDriestDayTemp_AprJun <- rbind(annualDriestDayTemp_AprJun, DriestDayTemp_AprJun))    
+        ifelse (r == 1, annualDriestDayTemp_OctDec <- DriestDayTemp_OctDec, annualDriestDayTemp_OctDec <- rbind(annualDriestDayTemp_OctDec, DriestDayTemp_OctDec))    
     }
     
 
-names(annualDriestDayTemp_AprJun) <- paste(c(1915:2015))
-save(as.numeric(as.character(annualDriestDayTemp_AprJun)), file=file.path(dir.jbHOME, "DriestDayTemp_AprJun19152015.Rdata"))
+names(annualDriestDayTemp_OctDec) <- paste(c(1915:2015))
+save(as.numeric(as.character(annualDriestDayTemp_OctDec)), file=file.path(dir.jbHOME, "DriestDayTemp_OctDec19152015.Rdata"))
 
 
 
