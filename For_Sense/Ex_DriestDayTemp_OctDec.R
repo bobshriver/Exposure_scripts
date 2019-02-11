@@ -162,9 +162,9 @@ print(Sys.time())
         ifelse (r == 1, annualDriestDayTemp_OctDec <- DriestDayTemp_OctDec, annualDriestDayTemp_OctDec <- rbind(annualDriestDayTemp_OctDec, DriestDayTemp_OctDec))    
     }
     
-
+annualDriestDayTemp_OctDec<-as.numeric(as.character(annualDriestDayTemp_OctDec))
 names(annualDriestDayTemp_OctDec) <- paste(c(1915:2015))
-save(as.numeric(as.character(annualDriestDayTemp_OctDec)), file=file.path(dir.jbHOME, "DriestDayTemp_OctDec19152015.Rdata"))
+save(annualDriestDayTemp_OctDec, file=file.path(dir.jbHOME, "DriestDayTemp_OctDec19152015.Rdata"))
 
 
 

@@ -162,9 +162,9 @@ print(Sys.time())
         ifelse (r == 1, annualDriestDayTemp_AprJun <- DriestDayTemp_AprJun, annualDriestDayTemp_AprJun <- rbind(annualDriestDayTemp_AprJun, DriestDayTemp_AprJun))    
     }
     
-
+annualDriestDayTemp_AprJun<-as.numeric(as.character(annualDriestDayTemp_AprJun))
 names(annualDriestDayTemp_AprJun) <- paste(c(1915:2015))
-save(as.numeric(as.character(annualDriestDayTemp_AprJun)), file=file.path(dir.jbHOME, "DriestDayTemp_AprJun19152015.Rdata"))
+save(annualDriestDayTemp_AprJun, file=file.path(dir.jbHOME, "DriestDayTemp_AprJun19152015.Rdata"))
 
 
 

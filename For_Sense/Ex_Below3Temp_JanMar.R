@@ -106,7 +106,7 @@ print(dir.regions_1Input)
       rownames(d1) <- c( name)
    
       rownames(d2) <- c( name)
-      out<-list(DriestDays=d1, HottestDays=d2)
+      out<-list(XX=d1, HottestDays=d2)
       return(out)
     }
 
@@ -144,12 +144,12 @@ print(Sys.time())
         cl<-makeCluster(20)
        registerDoParallel(cl)
         
-        DriestDayTemp_JanMar = foreach(s = sites, .combine = rbind,.packages=c('plyr','dplyr')) %dopar% {
+        Below3Temp_JanMar = foreach(s = sites, .combine = rbind,.packages=c('plyr','dplyr')) %dopar% {
           f <- list.files(file.path(dir.regions_3Runs[r], s) )
           if(length(f)==1){
             load(file.path(dir.regions_3Runs[r], s, "sw_output_sc1.RData"))
             print(s)
-            d <- calcHotDry_JanMar(RUN_DATA = runDataSC, name=s)$DriestDays
+            d <- calcHotDry_JanMar(RUN_DATA = runDataSC, name=s)$HottestDays
             d
             
           }
@@ -159,12 +159,12 @@ print(Sys.time())
         print(paste(regions[r], "Done"))
         print(Sys.time())
         
-        ifelse (r == 1, annualDriestDayTemp_JanMar <- DriestDayTemp_JanMar, annualDriestDayTemp_JanMar <- rbind(annualDriestDayTemp_JanMar, DriestDayTemp_JanMar))    
+        ifelse (r == 1, annualBelow3Temp_JanMar <- Below3Temp_JanMar, annualBelow3Temp_JanMar <- rbind(annualBelow3Temp_JanMar, Below3Temp_JanMar))    
     }
     
-annualDriestDayTemp_JanMar<-as.numeric(as.character(annualDriestDayTemp_JanMar))
-names(annualDriestDayTemp_JanMar) <- paste(c(1915:2015))
-save(annualDriestDayTemp_JanMar, file=file.path(dir.jbHOME, "DriestDayTemp_JanMar19152015.Rdata"))
+annualBelow3Temp_JanMar<-as.numeric(as.character(annualBelow3Temp_JanMar))
+names(annualBelow3Temp_JanMar) <- paste(c(1915:2015))
+save(annualBelow3Temp_JanMar, file=file.path(dir.jbHOME, "Below3Temp_JanMar19152015.Rdata"))
 
 
 
