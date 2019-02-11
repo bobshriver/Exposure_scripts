@@ -162,7 +162,6 @@ print(Sys.time())
         ifelse (r == 1, annualBelow3Temp_AprJun <- Below3Temp_AprJun, annualBelow3Temp_AprJun <- rbind(annualBelow3Temp_AprJun, Below3Temp_AprJun))    
     }
     
-annualBelow3Temp_AprJun<-as.numeric(as.character(annualBelow3Temp_AprJun))
 names(annualBelow3Temp_AprJun) <- paste(c(1915:2015))
 save(annualBelow3Temp_AprJun, file=file.path(dir.jbHOME, "Below3Temp_AprJun19152015.Rdata"))
 
