@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=ExBelow3DD_AprJun 
-#SBATCH --output=/cxfs/projects/usgs/ecosystems/sbsc/drylandeco/AFRI/Exposure_Data/Below3Temp_AprJun.out 
+#SBATCH --output=/cxfs/projects/usgs/ecosystems/sbsc/drylandeco/AFRI/Exposure_Data/Below3DD_AprJun.out 
 #SBATCH -n 1
 #SBATCH -c 20
 #SBATCH -p normal
@@ -18,6 +18,6 @@
 module load gcc/7.1.0
 
 srun date
-srun Rscript Ex_Below3Temp_AprJun.R
+srun Rscript Ex_Below3DD_AprJun.R
 srun date
  
