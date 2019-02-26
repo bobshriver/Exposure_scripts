@@ -46,8 +46,8 @@ print(dir.regions_1Input)
     
     dryDD<-function(x){ 
     	Temp<-x$Temp
-    	Temp[x$Temp<0]<-0
-    	sum(Temp[which(x$SWP<-3)])
+    	Temp[which(x$Temp<0)]<-0
+    	sum(Temp[which(x$SWP< -3)])
     	}
 
     calcHotDry_AprJun <- function(RUN_DATA, name){
