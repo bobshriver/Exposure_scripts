@@ -52,7 +52,7 @@ print(dir.regions_1Input)
     	if (length(which(x$SWP< -3))>0) {sum(Temp[which(x$SWP< -3)])} else{0}
     	}
 
-    calcHotDry_AprJun <- function(RUN_DATA, name){
+    calcHotDry_JulSep <- function(RUN_DATA, name){
       #print("Pre d1")
       #print(Sys.time())
       # s=1
@@ -64,9 +64,9 @@ print(dir.regions_1Input)
       dVWC <- as.data.frame(RUN_DATA@VWCMATRIC@Day)
       dTemps <- as.data.frame(RUN_DATA@TEMP@Day) 
 
-      dVWC_AprJun <- dVWC[which(dVWC$Day %in% c(91:181)),]
+      dVWC_JulSep <- dVWC[which(dVWC$Day %in% c(91:181)),]
       
-      dVWC_AprJun$Temp <- dTemps[which(dTemps$Day %in% c(91:181)),5]
+      dVWC_JulSep$Temp <- dTemps[which(dTemps$Day %in% c(91:181)),5]
 
       
       s_name <- paste0("Site_", as.integer(substr(name, 1, regexpr('_', name)-1)) )
@@ -82,20 +82,20 @@ print(dir.regions_1Input)
       
       nlyrs<-if(numlyrs<7){numlyrs} else {6}
       #print(nlyrs)
-      if(numlyrs>1 & numlyrs<7 ){dVWC_AprJun$Alllyrs <- apply(as.matrix(dVWC_AprJun[, c(3:(numlyrs+2))]), 1, FUN=function(x) weighted.mean(x, slyrwidths[1:nlyrs]))} 
-      if(numlyrs>1 & numlyrs>6 ){dVWC_AprJun$Alllyrs <- apply(as.matrix(dVWC_AprJun[, c(3:(6+2))]), 1, FUN=function(x) weighted.mean(x, slyrwidths[1:nlyrs]))}
-      if(numlyrs==1){dVWC_AprJun$Alllyrs <- as.matrix(dVWC_AprJun[, c(3:(numlyrs+2))])}
+      if(numlyrs>1 & numlyrs<7 ){dVWC_JulSep$Alllyrs <- apply(as.matrix(dVWC_JulSep[, c(3:(numlyrs+2))]), 1, FUN=function(x) weighted.mean(x, slyrwidths[1:nlyrs]))} 
+      if(numlyrs>1 & numlyrs>6 ){dVWC_JulSep$Alllyrs <- apply(as.matrix(dVWC_JulSep[, c(3:(6+2))]), 1, FUN=function(x) weighted.mean(x, slyrwidths[1:nlyrs]))}
+      if(numlyrs==1){dVWC_JulSep$Alllyrs <- as.matrix(dVWC_JulSep[, c(3:(numlyrs+2))])}
       
       sSAND <- soilSAND[which(soilSAND$Label==s_name), c(2:(1+length(slyrwidths)))]
       
       sCLAY <- soilCLAY[which(soilCLAY$Label==s_name), c(2:(1+length(slyrwidths)))]
       sandMEANtop <- weighted.mean(sSAND[1:nlyrs], slyrwidths[1:nlyrs])
       clayMEANtop <- weighted.mean(sCLAY[1:nlyrs], slyrwidths[1:nlyrs])
-      #dVWC_AprJun$count<-1:length(dVWC_AprJun$Year)
-       dVWC_AprJun$SWP <- VWCtoSWP_simple(vwc=dVWC_AprJun$Alllyrs, sand=sandMEANtop, clay=clayMEANtop)
-      #print(dVWC_AprJun$SWP[1:5])
-	#print(head(dVWC_AprJun))
-      d <- dVWC_AprJun[, c("Year", "Alllyrs", "Temp", "SWP")]
+      #dVWC_JulSep$count<-1:length(dVWC_JulSep$Year)
+       dVWC_JulSep$SWP <- VWCtoSWP_simple(vwc=dVWC_JulSep$Alllyrs, sand=sandMEANtop, clay=clayMEANtop)
+      #print(dVWC_JulSep$SWP[1:5])
+	#print(head(dVWC_JulSep))
+      d <- dVWC_JulSep[, c("Year", "Alllyrs", "Temp", "SWP")]
       #print(head(d))
       d_all_list<-split(d,d$Year)
       
@@ -149,12 +149,12 @@ print(Sys.time())
         cl<-makeCluster(20)
        registerDoParallel(cl)
         
-        Below3DD_AprJun = foreach(s = sites, .combine = rbind,.packages=c('plyr','dplyr')) %dopar% {
+        Below3DD_JulSep = foreach(s = sites, .combine = rbind,.packages=c('plyr','dplyr')) %dopar% {
           f <- list.files(file.path(dir.regions_3Runs[r], s) )
           if(length(f)==1){
             load(file.path(dir.regions_3Runs[r], s, "sw_output_sc1.RData"))
             print(s)
-            d <- calcHotDry_AprJun(RUN_DATA = runDataSC, name=s)
+            d <- calcHotDry_JulSep(RUN_DATA = runDataSC, name=s)
             d
             
           }
@@ -164,11 +164,11 @@ print(Sys.time())
         print(paste(regions[r], "Done"))
         print(Sys.time())
         
-        ifelse (r == 1, annualBelow3DD_AprJun <- Below3DD_AprJun, annualBelow3DD_AprJun <- rbind(annualBelow3DD_AprJun, Below3DD_AprJun))    
+        ifelse (r == 1, annualBelow3DD_JulSep <- Below3DD_JulSep, annualBelow3DD_JulSep <- rbind(annualBelow3DD_JulSep, Below3DD_JulSep))    
     }
     
-names(annualBelow3DD_AprJun) <- paste(c(1915:2015))
-save(annualBelow3DD_AprJun, file=file.path(dir.jbHOME, "Below3DD_AprJun19152015.Rdata"))
+names(annualBelow3DD_JulSep) <- paste(c(1915:2015))
+save(annualBelow3DD_JulSep, file=file.path(dir.jbHOME, "Below3DD_JulSep19152015.Rdata"))
 
 
 
