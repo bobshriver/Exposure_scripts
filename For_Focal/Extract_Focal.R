@@ -135,3 +135,6 @@ for (i in 1:dim(points_Focal)[1]){
        
 	
 }
+
+
+save('Temp_Focal','Precip_Focal','SWPshallow_Focal','SWPdeep_Focal','points_Focal',file=file.path(dir.jbHOME, "Focal_Data.Rdata"))
