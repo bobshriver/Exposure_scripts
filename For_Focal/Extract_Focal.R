@@ -68,38 +68,38 @@ SWPdeep_Focal<-SWPshallow_Focal<-Temp_Focal<-Precip_Focal<-array(NA,dim=c(101,12
       numlyrs <- dim(dVWC)[2] - 2
       
       nlyrs<-if(numlyrs<4){numlyrs} else {3}
-      #print(nlyrs)
-      if(numlyrs>1 & numlyrs<4 ){dVWC$Alllyrs <- apply(as.matrix(dVWC[, c(4:(numlyrs+2))]), 1, FUN=function(x) weighted.mean(x, slyrwidths[2:nlyrs]))} 
-      if(numlyrs>1 & numlyrs>3 ){dVWC$Alllyrs <- apply(as.matrix(dVWC[, c(4:(3+2))]), 1, FUN=function(x) weighted.mean(x, slyrwidths[2:nlyrs]))}
-      if(numlyrs==1){dVWC$Alllyrs <- NA} ###as.matrix(dVWC[, c(3:(numlyrs+2))])
+      print(nlyrs)
+      if(numlyrs>1 & numlyrs<4 ){dVWC$shallow<- apply(as.matrix(dVWC[, c(4:(numlyrs+2))]), 1, FUN=function(x) weighted.mean(x, slyrwidths[2:nlyrs]))} 
+      if(numlyrs>1 & numlyrs>3 ){dVWC$shallow<- apply(as.matrix(dVWC[, c(4:(3+2))]), 1, FUN=function(x) weighted.mean(x, slyrwidths[2:nlyrs]))}
+      if(numlyrs==1){dVWC$shallow <- NA} ###as.matrix(dVWC[, c(3:(numlyrs+2))])
       
       
-       if(numlyrs>1){
-      sSAND <- soilSAND[which(soilSAND$Label==s_name), c(2:(1+length(slyrwidths)))]
-      sCLAY <- soilCLAY[which(soilCLAY$Label==s_name), c(2:(1+length(slyrwidths)))]
-      sandMEANtop <- weighted.mean(sSAND[2:nlyrs], slyrwidths[2:nlyrs])
-      clayMEANtop <- weighted.mean(sCLAY[2:nlyrs], slyrwidths[2:nlyrs])
-       dVWC$SWPshallow <- VWCtoSWP_simple(vwc=dVWC$Alllyrs, sand=sandMEANtop, clay=clayMEANtop)
-} else{ dVWC$shallow <-NA}
+      # if(numlyrs>1){
+      #sSAND <- soilSAND[which(soilSAND$Label==s_name), c(2:(1+length(slyrwidths)))]
+      #sCLAY <- soilCLAY[which(soilCLAY$Label==s_name), c(2:(1+length(slyrwidths)))]
+      #sandMEANtop <- weighted.mean(sSAND[2:nlyrs], slyrwidths[2:nlyrs])
+      #clayMEANtop <- weighted.mean(sCLAY[2:nlyrs], slyrwidths[2:nlyrs])
+       #dVWC$SWPshallow <- VWCtoSWP_simple(vwc=dVWC$Alllyrs, sand=sandMEANtop, clay=clayMEANtop)
+#} else{ dVWC$shallow <-NA}
 
 
-  nlyrs<-if(numlyrs<7){numlyrs} else {6}
+  nlyrs<-if(numlyrs<7 ){numlyrs} else {6}
       #print(nlyrs)
-      if(numlyrs>4 & numlyrs<7 ){dVWC$Alllyrs <- apply(as.matrix(dVWC[, c(7:(numlyrs+2))]), 1, FUN=function(x) weighted.mean(x, slyrwidths[5:nlyrs]))} 
-      if(numlyrs>4 & numlyrs>6 ){dVWC$Alllyrs <- apply(as.matrix(dVWC[, c(7:(6+2))]), 1, FUN=function(x) weighted.mean(x, slyrwidths[5:nlyrs]))}
-      if(numlyrs<5){dVWC$Alllyrs <- NA} ###as.matrix(dVWC[, c(3:(numlyrs+2))])
+      if(numlyrs>4 & numlyrs<7 ){dVWC$deep <- apply(as.matrix(dVWC[, c(7:(numlyrs+2))]), 1, FUN=function(x) weighted.mean(x, slyrwidths[5:nlyrs]))} 
+      if(numlyrs>4 & numlyrs>6 ){dVWC$deep <- apply(as.matrix(dVWC[, c(7:(6+2))]), 1, FUN=function(x) weighted.mean(x, slyrwidths[5:nlyrs]))}
+      if(numlyrs<5){dVWC$deep <- NA} ###as.matrix(dVWC[, c(3:(numlyrs+2))])
       
      
-      if(numlyrs>4){
-      sSAND <- soilSAND[which(soilSAND$Label==s_name), c(2:(1+length(slyrwidths)))] 
-      sCLAY <- soilCLAY[which(soilCLAY$Label==s_name), c(2:(1+length(slyrwidths)))]
-      sandMEANtop <- weighted.mean(sSAND[5:nlyrs], slyrwidths[5:nlyrs])
-      clayMEANtop <- weighted.mean(sCLAY[5:nlyrs], slyrwidths[5:nlyrs])
-       dVWC$SWPdeep <- VWCtoSWP_simple(vwc=dVWC$Alllyrs, sand=sandMEANtop, clay=clayMEANtop)
-} else{ dVWC$SWPdeep<-NA}
+     # if(numlyrs>4){
+      #sSAND <- soilSAND[which(soilSAND$Label==s_name), c(2:(1+length(slyrwidths)))] 
+      #sCLAY <- soilCLAY[which(soilCLAY$Label==s_name), c(2:(1+length(slyrwidths)))]
+      #sandMEANtop <- weighted.mean(sSAND[5:nlyrs], slyrwidths[5:nlyrs])
+     # clayMEANtop <- weighted.mean(sCLAY[5:nlyrs], slyrwidths[5:nlyrs])
+       #dVWC$SWPdeep <- VWCtoSWP_simple(vwc=dVWC$Alllyrs, sand=sandMEANtop, clay=clayMEANtop)
+#} else{ dVWC$SWPdeep<-NA}
 	
-	shallow<-matrix(dVWC$SWPshallow,101,12, byrow=T)
-	deep<-matrix(dVWC$SWPdeep,101,12, byrow=T)
+	shallow<-matrix(dVWC$shallow,101,12, byrow=T)
+	deep<-matrix(dVWC$deep,101,12, byrow=T)
 	
 	my_list <- list("shallow" = shallow, "deep" = deep, "precip" = precip, 'temp'=temp)
 return(my_list)
@@ -111,13 +111,13 @@ for (i in 1:dim(points_Focal)[1]){
 	
 	  soildepths <- read.csv(file=file.path(dir.AFRI_Historical,points_Focal$region[i],"1_Input",  "SWRuns_InputData_SoilLayers_v9.csv"), header=TRUE )
       print(paste("soildepths", dim(soildepths)) )
-      soildata <- read.csv(file=file.path(dir.AFRI_Historical,points_Focal$region[i],"1_Input", "datafiles" , "SWRuns_InputData_soils_v12.csv"), header=TRUE )
-      print(paste("soildata", dim(soildata)) )
+      #soildata <- read.csv(file=file.path(dir.AFRI_Historical,points_Focal$region[i],"1_Input", "datafiles" , "SWRuns_InputData_soils_v12.csv"), header=TRUE )
+      #print(paste("soildata", dim(soildata)) )
             
   
 
-      soilSAND <- soildata[, c(1, grep("Sand", names(soildata))) ]
-      soilCLAY <- soildata[, c(1, grep("Clay", names(soildata))) ]
+      #soilSAND <- soildata[, c(1, grep("Sand", names(soildata))) ]
+      #soilCLAY <- soildata[, c(1, grep("Clay", names(soildata))) ]
     
      f <- list.files(file.path(dir.AFRI_Historical,points_Focal$region[i],"3_Runs",  points_Focal$AFRIpoint[i]) )
           if(length(f)==1){
