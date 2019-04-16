@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=ExSWABall_STR
+#SBATCH --job-name=ExSWABall_STZ
 #SBATCH --output=/cxfs/projects/usgs/ecosystems/sbsc/drylandeco/AFRI/Exposure_Data/SWABall_STZ.out 
 #SBATCH -n 1
 #SBATCH -c 20

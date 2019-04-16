@@ -67,6 +67,7 @@ print(dir.regions_1Input)
       names(d3)[2] <- c(name)
       d4 <- as.data.frame(t(d3))
       rownames(d4) <- c("day", name)
+      d4<-d4[,1:365]
       return(d4)
     }
 
