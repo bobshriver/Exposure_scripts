@@ -1,0 +1,31 @@
+ls
+ls()
+ls()
+RUN_DATA<-runDataSC
+name<-'Site1'
+dSWA <- as.data.frame(RUN_DATA@SWABULK@Year)#
+      dSWA_AprJun <- dSWA#
+      head(dSWA_AprJun)#
+      numlyrs <- dim(dSWA)[2] - 2#
+    if(numlyrs==1){dSWA_AprJun$Alllyrs <- (as.matrix(dSWA_AprJun[,3]))}#
+      if(numlyrs<3 & numlyrs>1){dSWA_AprJun$Alllyrs <- rowSums(as.matrix(dSWA_AprJun[, c(3:(numlyrs+2))]))} #
+       if(numlyrs>3){ dSWA_AprJun$Alllyrs <-  rowSums(as.matrix(dSWA_AprJun[, c(3:(3+2))]))}#
+      d <- dSWA_AprJun[, c("Alllyrs")][]#
+      d2 <-mean( dSWA_AprJun$Alllyrs)#
+      dSWA <- as.data.frame(RUN_DATA@SWABULK@Day)#
+      dSWA_AprJun <- dSWA#
+      head(dSWA_AprJun)#
+      numlyrs <- dim(dSWA)[2] - 2#
+      if(numlyrs==1){dSWA_AprJun$Alllyrs <- (as.matrix(dSWA_AprJun[,3]))}#
+      if(numlyrs<3 & numlyrs>1){dSWA_AprJun$Alllyrs <- rowSums(as.matrix(dSWA_AprJun[, c(3:(numlyrs+2))]))} #
+       if(numlyrs>3){ dSWA_AprJun$Alllyrs <-  rowSums(as.matrix(dSWA_AprJun[, c(3:(3+2))]))}#
+       d <- dSWA_AprJun[, c("Day", "Alllyrs")]#
+      d3 <-aggregate(d, by=list(d$Day), FUN=mean, na.rm=TRUE)#
+      d3<- d3[, c("Group.1", "Alllyrs")]#
+      d3<-rbind(c("Mean",d2),d3)#
+      names(d3)[2] <- c(name)#
+      d4 <- as.data.frame(t(d3))#
+      rownames(d4) <- c("day", name)#
+      return(d4)
+d4
+d4[2,]
