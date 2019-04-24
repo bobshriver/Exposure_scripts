@@ -16,7 +16,7 @@ dir.jbHOME <- "/cxfs/projects/usgs/ecosystems/sbsc/drylandeco/AFRI/Exposure_Data
 
 
 
-regions <-  c( "CaliforniaAnnual", "ColdDeserts", "HotDeserts", "NorthernMixedSubset", "SGS", "Western_Gap") #list.files(dir.AFRI_Historical)
+regions <-  c( "CaliforniaAnnual", "ColdDeserts", "HotDeserts", "NorthernMixedSubset", "SGS", "Western_Gap")#list.files(dir.AFRI_Historical)
 
 print(regions)
 dir.regions <- file.path(dir.AFRI_Historical, regions)
@@ -28,7 +28,7 @@ print(dir.regions_1Input)
 
 
 #Function for calculating WDD
-    calcSWA_STZ <- function(RUN_DATA, name){
+    calcSWA_AprJun <- function(RUN_DATA, name){
       #print("Pre d1")
       #print(Sys.time())
       # s=1
@@ -41,34 +41,17 @@ print(dir.regions_1Input)
       dSWA_AprJun <- dSWA
       head(dSWA_AprJun)
       numlyrs <- dim(dSWA)[2] - 2
-    if(numlyrs==1){dSWA_AprJun$Alllyrs <- (as.matrix(dSWA_AprJun[,3]))}
-      if(numlyrs<3 & numlyrs>1){dSWA_AprJun$Alllyrs <- rowSums(as.matrix(dSWA_AprJun[, c(3:(numlyrs+2))]))} 
-       if(numlyrs>3){ dSWA_AprJun$Alllyrs <-  rowSums(as.matrix(dSWA_AprJun[, c(3:(3+2))]))}
+      if(numlyrs>1){dSWA_AprJun$Alllyrs <- rowSums(as.matrix(dSWA_AprJun[, c(3:(numlyrs+2))]))} else{
+        dSWA_AprJun$Alllyrs <- as.matrix(dSWA_AprJun[, c(3:(numlyrs+2))])}
       
-      d <- dSWA_AprJun[, c("Alllyrs")][]
+      d <- dSWA_AprJun[, c("Year", "Alllyrs")]
       
-      d2 <-mean( dSWA_AprJun$Alllyrs)
-      
-      dSWA <- as.data.frame(RUN_DATA@SWABULK@Day)
-      dSWA_AprJun <- dSWA
-      head(dSWA_AprJun)
-      numlyrs <- dim(dSWA)[2] - 2
-      
-      if(numlyrs==1){dSWA_AprJun$Alllyrs <- (as.matrix(dSWA_AprJun[,3]))}
-      if(numlyrs<3 & numlyrs>1){dSWA_AprJun$Alllyrs <- rowSums(as.matrix(dSWA_AprJun[, c(3:(numlyrs+2))]))} 
-       if(numlyrs>3){ dSWA_AprJun$Alllyrs <-  rowSums(as.matrix(dSWA_AprJun[, c(3:(3+2))]))}
-      
-       d <- dSWA_AprJun[, c("Day", "Alllyrs")]
-      
-      d3 <-aggregate(d, by=list(d$Day), FUN=mean, na.rm=TRUE)
-      d3<- d3[, c("Group.1", "Alllyrs")]
-      
-      d3<-rbind(c("Mean",d2),d3)
-      names(d3)[2] <- c(name)
-      d4 <- as.data.frame(t(d3))
-      rownames(d4) <- c("day", name)
-      d4<-d4[,1:365]
-      return(d4)
+      d2 <-d
+      d2 <- d2[, c("Year", "Alllyrs")]
+      names(d2)[2] <- c(name)
+      d3 <- as.data.frame(t(d2))
+      rownames(d3) <- c("year", name)
+      return(d3)
     }
 
 print("Start Loop")
@@ -91,11 +74,11 @@ print(Sys.time())
         cl<-makeCluster(20)
         registerDoParallel(cl)
         
-        SWA_STZ = foreach(s = sites, .combine = rbind) %dopar% {
+        SWA_AprJun = foreach(s = sites, .combine = rbind) %dopar% {
           f <- list.files(file.path(dir.regions_3Runs[r], s) )
           if(length(f)==1){
             load(file.path(dir.regions_3Runs[r], s, "sw_output_sc1.RData"))
-            d <- calcSWA_STZ(RUN_DATA = runDataSC, name=s)
+            d <- calcSWA_AprJun(RUN_DATA = runDataSC, name=s)
             d[2,]
           }
         }
@@ -104,12 +87,12 @@ print(Sys.time())
         print(paste(regions[r], "Done"))
         print(Sys.time())
         
-        ifelse (r == 1, annualSWA_STZ <- SWA_STZ, annualSWA_STZ <- rbind(annualSWA_STZ, SWA_STZ))    
+        ifelse (r == 1, annualSWA_AprJun <- SWA_AprJun, annualSWA_AprJun <- rbind(annualSWA_AprJun, SWA_AprJun))    
     }
     
 
-names(annualSWA_STZ) <- paste(c(1915:2015))
-save(annualSWA_STZ, file=file.path(dir.jbHOME, "annualSWA_STZ19752015"))
+names(annualSWA_AprJun) <- paste(c(1915:2015))
+save(annualSWA_AprJun, file=file.path(dir.jbHOME, "annualSWA19152015"))
 
 
 
