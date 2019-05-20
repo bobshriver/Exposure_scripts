@@ -118,18 +118,19 @@ print(dir.regions_1Input)
       sSAND <- soilSAND[which(soilSAND$Label==s_name), c(2:(1+length(slyrwidths)))]
       sCLAY <- soilCLAY[which(soilCLAY$Label==s_name), c(2:(1+length(slyrwidths)))]
       
-      threshold<-SWPtoVWC(3.9,sSAND,sCLAY)
+      threshold<-unlist((SWPtoVWC(-3.9,sSAND,sCLAY)))
       
      dSWA_AprJun[,3:10]<-t((t(dSWA_AprJun[,3:10])-threshold)*slyrwidths) 
+     dSWA_AprJun[which(dSWA_AprJun<0, arr.ind=T)]<-0
      
      
       
       head(dSWA_AprJun)
       numlyrs <- dim(dSWA)[2] - 2
-      if(numlyrs==1){NA}
-       if(numlyrs==2){ dSWA_AprJun$Alllyrs <- as.matrix(dSWA_AprJun[, c(3:(numlyrs+2))])}
-       if(numlyrs>2 & numlyrs<5) {dSWA_AprJun$Alllyrs <- rowSums(as.matrix(dSWA_AprJun[, c(4:(numlyrs+2))]))} 
-      if(numlyrs>4) {dSWA_AprJun$Alllyrs <- rowSums(as.matrix(dSWA_AprJun[, c(4:(4+2))]))} 
+      if(numlyrs==1 | numlyrs==2){NA}
+       if(numlyrs==3){ dSWA_AprJun$Alllyrs <- as.matrix(dSWA_AprJun[, c(3:(numlyrs+2))])}
+       if(numlyrs>3 & numlyrs<7) {dSWA_AprJun$Alllyrs <- rowSums(as.matrix(dSWA_AprJun[, c(4:(numlyrs+2))]))} 
+      if(numlyrs>6) {dSWA_AprJun$Alllyrs <- rowSums(as.matrix(dSWA_AprJun[, c(4:(6+2))]))} 
       
       d <- dSWA_AprJun[, c("Year", "Alllyrs")]
       
