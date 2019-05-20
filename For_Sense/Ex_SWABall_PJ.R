@@ -113,7 +113,7 @@ print(dir.regions_1Input)
       sdepths[sdepths > maxdepth ] <- NA
       sdepth <- sdepths[-1]
       slyrwidths <- diff(c(0, na.omit(t(sdepth)) ) )
-      numlyrs <- dim(dVWC)[2] - 2
+      numlyrs <- dim(dSWA)[2] - 2
      
       sSAND <- soilSAND[which(soilSAND$Label==s_name), c(2:(1+length(slyrwidths)))]
       sCLAY <- soilCLAY[which(soilCLAY$Label==s_name), c(2:(1+length(slyrwidths)))]
@@ -152,6 +152,23 @@ print(Sys.time())
 
     for (r in 1:length(regions)){
       # r=1
+      
+        soildepths <- read.csv(file=file.path(dir.regions_1Input[r],  "SWRuns_InputData_SoilLayers_v9.csv"), header=TRUE )
+      print(paste("soildepths", dim(soildepths)) )
+      soildata <- read.csv(file=file.path(dir.regions_1Input[r], "datafiles" , "SWRuns_InputData_soils_v12.csv"), header=TRUE )
+      print(paste("soildata", dim(soildata)) )
+            
+      #print(str(soildata))
+      
+      # metadata <- readRDS(file=file.path(dir.regions[r], "SFSW2_project_descriptions.rds") )
+      # #str(metadata[["sim_time"]])
+      # isim_time <- metadata[["sim_time"]]
+      # simTime2 <- metadata[["sim_time"]]$sim_time2_North
+
+      soilSAND <- soildata[, c(1, grep("Sand", names(soildata))) ]
+      soilCLAY <- soildata[, c(1, grep("Clay", names(soildata))) ]
+    
+
  
       #print(str(soildata))
     
