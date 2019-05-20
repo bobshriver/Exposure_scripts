@@ -32,9 +32,9 @@ SWPtoVWC <- function(swp, sand, clay) {
 				bar_conversion <- 1024
 				MPa_toBar <- -10
 		
-				get_vector <- function(swp, sand, clay, thetas=thetas, psis=psis, b=b, do.na=TRUE){#either swp or sand/clay needs be a single value
+				get_vector <- function(swp, sand, clay, thetas=thetas, psis=psis, b=b){#either swp or sand/clay needs be a single value
 					vwc <- ifelse(!is.na(swp) & swp <= 0 & sand <= 1 & sand >= 0 & clay <= 1 & clay >= 0, thetas * (psis / (swp * MPa_toBar * bar_conversion))^(1/b) / 100, NA)
-					if(do.na & length(na.index) > 0){
+					if( length(na.index) > 0){
 						vwc <- napredict(na.act, vwc)
 					}
 					return(vwc)
@@ -56,7 +56,7 @@ SWPtoVWC <- function(swp, sand, clay) {
 						psis <- napredict(na.act, psis)
 						thetas <- napredict(na.act, thetas)
 						b <- napredict(na.act, b)
-						vwc <- sapply(1:ncol(swp), FUN=function(d) get_vector(swp[, d], sand[d], clay[d], thetas=thetas[d], psis=psis[d], b=b[d], do.na=FALSE))
+						vwc <- sapply(1:ncol(swp), FUN=function(d) get_vector(swp[, d], sand[d], clay[d], thetas=thetas[d], psis=psis[d], b=b[d]))
 					}
 				}
 			} else {
