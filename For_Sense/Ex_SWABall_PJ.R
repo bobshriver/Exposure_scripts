@@ -120,7 +120,7 @@ print(dir.regions_1Input)
       
       threshold<-unlist((SWPtoVWC(-3.9,sSAND,sCLAY)))
       
-     dSWA_AprJun[,3:10]<-t((t(dSWA_AprJun[,3:10])-threshold)*slyrwidths) 
+     dSWA_AprJun[,3:(numlyrs+2)]<-t((t(dSWA_AprJun[,3:(numlyrs+2)])-threshold)*slyrwidths) 
      dSWA_AprJun[which(dSWA_AprJun<0, arr.ind=T)]<-0
      
      
@@ -185,6 +185,7 @@ print(Sys.time())
             load(file.path(dir.regions_3Runs[r], s, "sw_output_sc1.RData"))
             d <- calcSWA_AprJun(RUN_DATA = runDataSC, name=s)
             d[2,]
+            print(i)
           }
         }
         stopCluster(cl)
