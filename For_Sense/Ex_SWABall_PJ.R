@@ -118,7 +118,7 @@ print(dir.regions_1Input)
       sSAND <- soilSAND[which(soilSAND$Label==s_name), c(2:(1+length(slyrwidths)))]
       sCLAY <- soilCLAY[which(soilCLAY$Label==s_name), c(2:(1+length(slyrwidths)))]
       
-      threshold<-SWPtoVWC(-3.9,sSAND,sCLAY)
+      threshold<-SWPtoVWC(3.9,sSAND,sCLAY)
       
      dSWA_AprJun[,3:10]<-t((t(dSWA_AprJun[,3:10])-threshold)*slyrwidths) 
      
