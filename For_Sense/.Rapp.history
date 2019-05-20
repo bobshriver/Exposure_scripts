@@ -1,6 +1,5 @@
 ls
 ls()
-ls()
 RUN_DATA<-runDataSC
 name<-'Site1'
 dSWA <- as.data.frame(RUN_DATA@SWABULK@Year)#
@@ -29,3 +28,4 @@ dSWA <- as.data.frame(RUN_DATA@SWABULK@Year)#
       return(d4)
 d4
 d4[2,]
+sqrt(2.5)
