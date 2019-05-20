@@ -23,7 +23,7 @@ print(dir.regions)
      getWatYrTEMP <- function(RUN_DATA, name){
       #RUN_DATA =runDataSC
       d1 <- as.data.frame(RUN_DATA@TEMP@Month)
-      d1<-d1(which(d1$Month>4 & d1$Month<11 ))
+      d1<-d1[which(d1$Month>4 & d1$Month<11 ),]
       d2 <-aggregate(d1, by=list(d1$Year), FUN=mean, na.rm=TRUE)
       
       d2 <- d2[,c("Year", "avg_C")]
