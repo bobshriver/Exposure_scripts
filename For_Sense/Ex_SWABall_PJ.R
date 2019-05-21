@@ -185,7 +185,7 @@ print(Sys.time())
             load(file.path(dir.regions_3Runs[r], s, "sw_output_sc1.RData"))
             d <- calcSWA_AprJun(RUN_DATA = runDataSC, name=s)
             d[2,]
-            print(i)
+           
           }
         }
         stopCluster(cl)
