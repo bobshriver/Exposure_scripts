@@ -66,7 +66,6 @@ SWPtoVWC <- function(swp, sand, clay) {
 			return(vwc) #fraction m3/m3 [0, 1]
 		}
 
-
 #These are the functions I need:
 # if (!exists("vwcmatric.dy")) vwcmatric.dy <- get_Response_aggL(swof["sw_vwcmatric"], tscale = "dy", 
 #                                                                scaler = 1, FUN = stats::weighted.mean, weights = layers_width, 
@@ -93,7 +92,8 @@ print(dir.regions_1Input)
 
 #Function for calculating WDD
     calcSWA_AprJun <- function(RUN_DATA, name){
-      #print("Pre d1")
+     
+#print("Pre d1")
       #print(Sys.time())
       # s=1
       #   sites <- list.files(dir.regions_3Runs[1])
@@ -102,7 +102,7 @@ print(dir.regions_1Input)
       #   name=sites[s]
       
       dSWA <- as.data.frame(RUN_DATA@VWCMATRIC@Month)
-      dSWA_AprJun <- dSWA[which(dSWA$Month %in% c(3:5)),]
+      dSWA_AprJun <- dSWA[which(dSWA$Month %in% c(4:6)),]
      
      
       s_name <- paste0("Site_", as.integer(substr(name, 1, regexpr('_', name)-1)) )
@@ -127,10 +127,8 @@ print(dir.regions_1Input)
       
       head(dSWA_AprJun)
       numlyrs <- dim(dSWA)[2] - 2
-      if(numlyrs==1 | numlyrs==2){NA}
-       if(numlyrs==3){ dSWA_AprJun$Alllyrs <- as.matrix(dSWA_AprJun[, c(3:(numlyrs+2))])}
-       if(numlyrs>3 & numlyrs<7) {dSWA_AprJun$Alllyrs <- rowSums(as.matrix(dSWA_AprJun[, c(4:(numlyrs+2))]))} 
-      if(numlyrs>6) {dSWA_AprJun$Alllyrs <- rowSums(as.matrix(dSWA_AprJun[, c(4:(6+2))]))} 
+        if(numlyrs>1){dSWA_AprJun$Alllyrs <- rowSums(as.matrix(dSWA_AprJun[, c(3:(numlyrs+2))]))} else{
+        dSWA_AprJun$Alllyrs <- as.matrix(dSWA_AprJun[, c(3:(numlyrs+2))])}
       
       d <- dSWA_AprJun[, c("Year", "Alllyrs")]
       
@@ -141,6 +139,7 @@ print(dir.regions_1Input)
       rownames(d3) <- c("year", name)
       return(d3)
     }
+
 
 print("Start Loop")
 print(Sys.time())
@@ -153,7 +152,7 @@ print(Sys.time())
 
     for (r in 1:length(regions)){
       # r=1
-      
+ 
         soildepths <- read.csv(file=file.path(dir.regions_1Input[r],  "SWRuns_InputData_SoilLayers_v9.csv"), header=TRUE )
       print(paste("soildepths", dim(soildepths)) )
       soildata <- read.csv(file=file.path(dir.regions_1Input[r], "datafiles" , "SWRuns_InputData_soils_v12.csv"), header=TRUE )
@@ -170,7 +169,6 @@ print(Sys.time())
       soilCLAY <- soildata[, c(1, grep("Clay", names(soildata))) ]
     
 
- 
       #print(str(soildata))
     
       sites <- list.files(dir.regions_3Runs[r])
@@ -185,7 +183,6 @@ print(Sys.time())
             load(file.path(dir.regions_3Runs[r], s, "sw_output_sc1.RData"))
             d <- calcSWA_AprJun(RUN_DATA = runDataSC, name=s)
             d[2,]
-           
           }
         }
         stopCluster(cl)
@@ -198,8 +195,7 @@ print(Sys.time())
     
 
 names(annualSWA_AprJun) <- paste(c(1915:2015))
-annualSWA_Spring<-annualSWA_AprJun
-save(annualSWA_Spring, file=file.path(dir.jbHOME, "annualSWA_Spring19152015"))
+save(annualSWA_AprJun, file=file.path(dir.jbHOME, "annualSWA_AprJun19152015_2"))
 
 
 

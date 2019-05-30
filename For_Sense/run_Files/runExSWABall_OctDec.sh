@@ -17,6 +17,6 @@
 # run your application, precede the application command with srun
 module load gcc/7.1.0
 srun date
-srun Rscript Ex_SWABall_OctDec.R
+srun Rscript Ex_SWABall_OctDec_2.R
 srun date
  

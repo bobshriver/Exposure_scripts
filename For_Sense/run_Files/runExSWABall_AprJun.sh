@@ -16,6 +16,6 @@
 # run your application, precede the application command with srun
 # run your application, precede the application command with srun
 srun date
-srun Rscript Ex_SWABall_AprJun.R
+srun Rscript Ex_SWABall_AprJun_2.R
 srun date
  
