@@ -84,7 +84,7 @@ regions <-  c( "CaliforniaAnnual", "ColdDeserts", "HotDeserts", "NorthernMixedSu
 print(regions)
 dir.regions <- file.path(dir.AFRI_Historical, regions)
 dir.regions_3Runs <- file.path(dir.AFRI_Historical, regions, "3_Runs" )
-#dir.regions_1Input <- file.path(dir.AFRI_Historical, regions, "1_Input")
+dir.regions_1Input <- file.path(dir.AFRI_Historical, regions, "1_Input")
 
 print(dir.regions_3Runs)
 #print(dir.regions_1Input)
